@@ -159,6 +159,5 @@ char *fix_path(char *parent, char *fname)
 	while (fname[i])
 		out[size++] = fname[i++];
 	out[size] = '\0';
-	printf("PRODUCT = %s\n", out);
 	return (out);
 }
