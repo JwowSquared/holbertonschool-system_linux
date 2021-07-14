@@ -2,74 +2,114 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include "hls.h"
 
 /**
+* main - entrypoint for the program
+* @ac: number of commandline arguments
+* @av: array of strings / commandline arguments
 *
+* Return: 0 on success, 2 on error
 */
 int main(int ac, char **av)
 {
 	int *flags = NULL;
-	int idx, multi, num_targets = 0, *key = NULL;
+	int idx, multi, num_dirs = 0, num_regs = 0, *key = NULL, ecode = 0;
 
 	key = malloc(sizeof(int) * ac);
 	if (key == NULL)
 		return (1);
 
-	update_flags(&flags, NULL);
-	key[0] = 0;
-	for (idx = 1; idx < ac; idx++)
-	{
-		key[idx] = 0;
-		if (av[idx][0] == '-')
-			update_flags(&flags, av[idx]);
-		else
-		{
-			key[idx] = 1;
-			num_targets++;
-		}
-	}
-	multi = num_targets;
+	update_flags(flags, NULL);
+	ecode = key_parser(&key, &flags, &num_dirs, &num_regs, ac, av);
+
+	multi = num_dirs + num_regs;
+	if (multi < 1)
+		print_dir("./", flags);
 
 	for (idx = 0; idx < ac; idx++)
-		if (key[idx])
+		if (key[idx] == 2)
+		{
+			if (--num_regs > 0)
+				printf("%s  ", av[idx]);
+			else
+				printf("%s\n", av[idx]);
+		}
+
+	for (idx = 0; idx < ac; idx++)
+		if (key[idx] == 1)
 		{
 			if (multi > 1)
 				printf("%s:\n", av[idx]);
-			print_dir(av[idx]);
-			if (--num_targets > 0)
+			print_dir(av[idx], flags);
+			if (--num_dirs > 0)
 				printf("\n");
 		}
 
-	return (0);
+	exit(ecode);
 }
 
 /**
+* key_parser - handles flags and prints errors on invalid words
+* @key: double pointer to key array to be updated by av words
+* @flags: double pointer to flags array to be updated by flag words
+* @dirs: pointer to num of directories to print
+* @regs: pointer to num of non-directories to print
+* @ac: argc from main
+* @av: argv from main
 *
+* Return: error code value; 0 on success, else 2
 */
-void print_dir(char *path)
+int key_parser(int **key, int **flags, int *dirs, int *regs, int ac, char **av)
 {
-	DIR *dir;
-	struct dirent *current;
-	struct dirent *out;
+	int idx, ecode = 0;
+	struct stat stats;
+	char *err_msg;
 
-	dir = opendir(path);
-	current = readdir(dir);
-	while (current != NULL)
+	(*key)[0] = 0;
+	for (idx = 1; idx < ac; idx++)
 	{
-		out = current;
-		current = readdir(dir);
-		if (current == NULL)
-			printf("%s\n", out->d_name);
+		(*key)[idx] = 0;
+		if (av[idx][0] == '-')
+			update_flags(flags, av[idx]);
 		else
-			printf("%s  ", out->d_name);
+		{
+			if (lstat(av[idx], &stats) == -1)
+			{
+				err_msg = "%s: cannot access %s: No such file or directory\n";
+				fprintf(stderr, err_msg, av[0], av[idx]);
+				ecode = 2;
+			}
+			else if (S_ISDIR(stats.st_mode))
+			{
+				if (S_IROTH & stats.st_mode)
+				{
+					(*key)[idx] = 1;
+					(*dirs)++;
+				}
+				else
+				{
+					err_msg = "%s: cannot open directory %s: Permission denied\n";
+					fprintf(stderr, err_msg, av[0], av[idx]);
+					ecode = 2;
+				}
+			}
+			else if (S_ISREG(stats.st_mode))
+			{
+				(*key)[idx] = 2;
+				(*regs)++;
+			}
+		}
 	}
-
-	closedir(dir);
+	return (ecode);
 }
 
 /**
-*
+* update_flags - turns on flags depending on input
+* @flags: double pointer to flags int array (size 8)
+* @input: flags string to translate
 */
 void update_flags(int **flags, char *input)
 {
@@ -106,16 +146,4 @@ void update_flags(int **flags, char *input)
 		else if (input[idx] == 'R')
 			(*flags)[7] = 1;
 	}
-}
-
-/**
-*
-*/
-void print_flags(int *out)
-{
-	int idx = -1;
-
-	printf("\nFlags info:\n");
-	while (++idx < 8)
-		printf("flag %d = %d\n", idx, out[idx]);
 }
