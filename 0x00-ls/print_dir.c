@@ -4,6 +4,9 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <pwd.h>
+#include <grp.h>
+#include <time.h>
 #include "hls.h"
 
 /**
@@ -33,7 +36,9 @@ void print_dir(char *path, int *flags)
 	{
 		if (hidden_check(current->d_name, flags))
 		{
-			if (--num_out <= 0 || flags[0])
+			if (flags[3])
+				print_details(current->d_name);
+			else if (--num_out <= 0 || flags[0])
 				printf("%s\n", current->d_name);
 			else
 				printf("%s  ", current->d_name);
@@ -68,4 +73,39 @@ int hidden_check(char *path, int *flags)
 	if (path[0] == '.')
 		return (0);
 	return (1);
+}
+
+/**
+* print_details - used for the -l operation
+* @path: path to describe
+*/
+void print_details(char *path)
+{
+	struct stat s;
+	int perms, max = 9;
+	char *out = "rxw", *usr, *grp, *date_string;
+
+	lstat(path, &s);
+	perms = s.st_mode;
+
+	if (perms & 16384)
+		printf("d");
+	else
+		printf("-");
+
+	while (max > 0)
+	{
+		perms = perms << 1;
+		if (perms & 512)
+			printf("%c", out[max % 3]);
+		else
+			printf("-");
+		max--;
+	}
+
+	usr = getpwuid(s.st_uid)->pw_name;
+	grp = getgrgid(s.st_gid)->gr_name;
+	printf(" %d %s %s %d ", (int)s.st_nlink, usr, grp, (int)s.st_size);
+	date_string = ctime(&(s.st_mtime));
+	printf("%.12s %s\n", &(date_string[4]), path);
 }

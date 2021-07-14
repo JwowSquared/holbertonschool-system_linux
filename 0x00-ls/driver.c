@@ -32,7 +32,9 @@ int main(int ac, char **av)
 	for (idx = 0; idx < ac; idx++)
 		if (key[idx] == 2)
 		{
-			if (--num_regs <= 0 || flags[0])
+			if (flags[3])
+				print_details(av[idx]);
+			else if (--num_regs <= 0 || flags[0])
 				printf("%s\n", av[idx]);
 			else
 				printf("%s  ", av[idx]);
