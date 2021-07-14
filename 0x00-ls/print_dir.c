@@ -37,7 +37,7 @@ void print_dir(char *path, int *flags)
 		if (hidden_check(current->d_name, flags))
 		{
 			if (flags[3])
-				print_details(current->d_name);
+				print_details(current->d_name, path);
 			else if (--num_out <= 0 || flags[0])
 				printf("%s\n", current->d_name);
 			else
@@ -79,13 +79,14 @@ int hidden_check(char *path, int *flags)
 * print_details - used for the -l operation
 * @path: path to describe
 */
-void print_details(char *path)
+void print_details(char *fname, char *parent)
 {
 	struct stat s;
 	int perms, max = 9;
-	char *out = "rxw", *usr, *grp, *date_string;
+	char *out = "rxw", *usr, *grp, *date_string, *path;
 
-	lstat(path, &s);
+	path = fix_path(parent, fname);
+	perms = lstat(path, &s);
 	perms = s.st_mode;
 
 	if (perms & 16384)
@@ -107,5 +108,49 @@ void print_details(char *path)
 	grp = getgrgid(s.st_gid)->gr_name;
 	printf(" %d %s %s %d ", (int)s.st_nlink, usr, grp, (int)s.st_size);
 	date_string = ctime(&(s.st_mtime));
-	printf("%.12s %s\n", &(date_string[4]), path);
+	printf("%.12s %s\n", &(date_string[4]), fname);
+	free(path);
+}
+
+/**
+* fix_path - prepends parent to fname, split with /
+* @parent: the absolute path minus the file name
+* @fname: file name
+*
+* Return: pointer to full path, else NULL
+*/
+char *fix_path(char *parent, char *fname)
+{
+	int i = -1, j = -1, size = 0;
+	char *out;
+
+	while (parent[i + 1])
+		i++;
+
+	while (fname[j + 1])
+		j++;
+
+	size = 1 + i + j;
+	if (parent[i] != '/')
+		size++;
+
+	out = malloc(sizeof(char) * size);
+	if (out == NULL)
+		return ("NULL");
+
+	size = 0;
+	while (parent[size])
+	{
+		out[size] = parent[size];
+		size++;
+	}
+
+	if (parent[i - 1] != '/')
+		out[size++] = '/';
+
+	i = 0;
+	while (fname[i])
+		out[size++] = fname[i++];
+
+	return (out);
 }

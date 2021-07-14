@@ -33,7 +33,7 @@ int main(int ac, char **av)
 		if (key[idx] == 2)
 		{
 			if (flags[3])
-				print_details(av[idx]);
+				print_details(av[idx], NULL);
 			else if (--num_regs <= 0 || flags[0])
 				printf("%s\n", av[idx]);
 			else
