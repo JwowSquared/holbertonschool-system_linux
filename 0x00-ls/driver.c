@@ -39,7 +39,7 @@ int main(int ac, char **av)
 			else
 				printf("%s  ", av[idx]);
 		}
-	if (multi > 1 && multi != num_dirs && !flags[3])
+	if (multi > 1 && multi != num_dirs && num_dirs != 0)
 		printf("\n");
 
 	for (idx = 0; idx < ac; idx++)
