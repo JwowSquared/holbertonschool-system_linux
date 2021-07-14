@@ -7,7 +7,8 @@
 #include "hls.h"
 
 /**
-* this is for debugging, dont push this
+* print_flags - this is for debugging
+* @out: flags integery array
 */
 void print_flags(int *out)
 {

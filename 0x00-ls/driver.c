@@ -26,7 +26,7 @@ int main(int ac, char **av)
 	ecode = key_parser(&key, &flags, &num_dirs, &num_regs, ac, av);
 
 	multi = num_dirs + num_regs;
-	if (multi < 1)
+	if (multi < 1 && ecode == 0)
 		print_dir("./", flags);
 
 	for (idx = 0; idx < ac; idx++)
@@ -37,6 +37,8 @@ int main(int ac, char **av)
 			else
 				printf("%s\n", av[idx]);
 		}
+	if (multi > 1 && multi != num_dirs)
+		printf("\n");
 
 	for (idx = 0; idx < ac; idx++)
 		if (key[idx] == 1)
