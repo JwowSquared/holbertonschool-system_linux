@@ -32,10 +32,10 @@ int main(int ac, char **av)
 	for (idx = 0; idx < ac; idx++)
 		if (key[idx] == 2)
 		{
-			if (--num_regs > 0)
-				printf("%s  ", av[idx]);
-			else
+			if (--num_regs <= 0 || flags[0])
 				printf("%s\n", av[idx]);
+			else
+				printf("%s  ", av[idx]);
 		}
 	if (multi > 1 && multi != num_dirs)
 		printf("\n");
@@ -43,7 +43,7 @@ int main(int ac, char **av)
 	for (idx = 0; idx < ac; idx++)
 		if (key[idx] == 1)
 		{
-			if (multi > 1)
+			if (multi > 1 || (multi > 0 && ecode == 2))
 				printf("%s:\n", av[idx]);
 			print_dir(av[idx], flags);
 			if (--num_dirs > 0)
