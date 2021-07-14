@@ -131,7 +131,7 @@ char *fix_path(char *parent, char *fname)
 	while (fname[j + 1])
 		j++;
 
-	size = 1 + i + j;
+	size = 3 + i + j;
 	if (parent[i] != '/')
 		size++;
 
@@ -146,13 +146,12 @@ char *fix_path(char *parent, char *fname)
 		size++;
 	}
 
-	if (parent[i - 1] != '/')
+	if (parent[i] != '/')
 		out[size++] = '/';
 
 	i = 0;
 	while (fname[i])
 		out[size++] = fname[i++];
 	out[size] = '\0';
-
 	return (out);
 }
