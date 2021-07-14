@@ -87,7 +87,7 @@ void print_details(char *fname, char *parent)
 	char *out = "rxw", *usr, *grp, *date_string, *path;
 
 	path = fix_path(parent, fname);
-	perms = lstat(path, &s);
+	lstat(path, &s);
 	perms = s.st_mode;
 
 	if (perms & 16384)
@@ -152,6 +152,7 @@ char *fix_path(char *parent, char *fname)
 	i = 0;
 	while (fname[i])
 		out[size++] = fname[i++];
+	out[size] = '\0';
 
 	return (out);
 }
