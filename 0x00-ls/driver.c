@@ -22,7 +22,7 @@ int main(int ac, char **av)
 	if (key == NULL)
 		return (1);
 
-	update_flags(flags, NULL);
+	update_flags(&flags, NULL);
 	ecode = key_parser(&key, &flags, &num_dirs, &num_regs, ac, av);
 
 	multi = num_dirs + num_regs;
@@ -47,7 +47,8 @@ int main(int ac, char **av)
 			if (--num_dirs > 0)
 				printf("\n");
 		}
-
+	free(key);
+	free(flags);
 	exit(ecode);
 }
 
