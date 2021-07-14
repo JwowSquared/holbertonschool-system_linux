@@ -86,7 +86,11 @@ void print_details(char *fname, char *parent)
 	int perms, max = 9;
 	char *out = "rxw", *usr, *grp, *date_string, *path;
 
-	path = fix_path(parent, fname);
+	if (parent != NULL)
+		path = fix_path(parent, fname);
+	else
+		path = fname;
+
 	lstat(path, &s);
 	perms = s.st_mode;
 
@@ -110,7 +114,9 @@ void print_details(char *fname, char *parent)
 	printf(" %d %s %s %d ", (int)s.st_nlink, usr, grp, (int)s.st_size);
 	date_string = ctime(&(s.st_mtime));
 	printf("%.12s %s\n", &(date_string[4]), fname);
-	free(path);
+
+	if (parent != NULL)
+		free(path);
 }
 
 /**
@@ -153,5 +159,6 @@ char *fix_path(char *parent, char *fname)
 	while (fname[i])
 		out[size++] = fname[i++];
 	out[size] = '\0';
+	printf("PRODUCT = %s\n", out);
 	return (out);
 }
