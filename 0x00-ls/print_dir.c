@@ -77,7 +77,8 @@ int hidden_check(char *path, int *flags)
 
 /**
 * print_details - used for the -l operation
-* @path: path to describe
+* @fname: file name
+* @parent: any additional path required for lstat
 */
 void print_details(char *fname, char *parent)
 {
