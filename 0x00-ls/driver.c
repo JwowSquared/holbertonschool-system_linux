@@ -152,3 +152,30 @@ void update_flags(int **flags, char *input)
 			(*flags)[7] = 1;
 	}
 }
+
+/**
+* hidden_check - checks if a file/directory should be displayed
+* @path: raw path
+* @flags: modes to determine if the path should be displayed
+*
+* Return: 1 if path should be printed, else 0
+*/
+int hidden_check(char *path, int *flags)
+{
+	if (flags[1])
+		return (1);
+	if (flags[2])
+	{
+		if (path[0] == '.')
+		{
+			if (path[1] == '\0')
+				return (0);
+			if (path[1] == '.' && path[2] == '\0')
+				return (0);
+			return (1);
+		}
+	}
+	if (path[0] == '.')
+		return (0);
+	return (1);
+}

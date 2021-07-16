@@ -49,33 +49,6 @@ void print_dir(char *path, int *flags)
 }
 
 /**
-* hidden_check - checks if a file/directory should be displayed
-* @path: raw path
-* @flags: modes to determine if the path should be displayed
-*
-* Return: 1 if path should be printed, else 0
-*/
-int hidden_check(char *path, int *flags)
-{
-	if (flags[1])
-		return (1);
-	if (flags[2])
-	{
-		if (path[0] == '.')
-		{
-			if (path[1] == '\0')
-				return (0);
-			if (path[1] == '.' && path[2] == '\0')
-				return (0);
-			return (1);
-		}
-	}
-	if (path[0] == '.')
-		return (0);
-	return (1);
-}
-
-/**
 * print_details - used for the -l operation
 * @fname: file name
 * @parent: any additional path required for lstat
@@ -83,8 +56,9 @@ int hidden_check(char *path, int *flags)
 void print_details(char *fname, char *parent)
 {
 	struct stat s;
-	int perms, max = 9;
-	char *out = "rxw", *usr, *grp, *date_string, *path;
+	int perms, i = 0;
+	char *path, *buf = NULL;
+	ssize_t BUFLEN = 1024;
 
 	if (parent != NULL)
 		path = fix_path(parent, fname);
@@ -94,8 +68,74 @@ void print_details(char *fname, char *parent)
 	lstat(path, &s);
 	perms = s.st_mode;
 
+	if (perms & 8192)
+	{
+		buf = malloc(sizeof(char) * BUFLEN);
+		if (buf == NULL)
+			return; /* memory error */
+
+		while (i < BUFLEN)
+			buf[i++] = '\0';
+		readlink(path, buf, BUFLEN);
+	}
+
+	display_long(perms, &s, fname);
+
+	if (buf != NULL)
+	{
+		printf(" -> %s", buf);
+		free(buf);
+	}
+	printf("\n");
+
+	if (parent != NULL)
+		free(path);
+}
+
+/**
+* display_long - displays the long format
+* @perms: permission value
+* @s: pointer to stat struct
+* @fname: filename
+*/
+void display_long(int perms, struct stat *s, char *fname)
+{
+	char *date_string;
+	struct passwd *usr;
+	struct group *grp;
+
+	print_perms(perms);
+	printf(" %d", (int)s->st_nlink);
+
+	usr = getpwuid(s->st_uid);
+	grp = getgrgid(s->st_gid);
+	if (usr != NULL)
+		printf(" %s", usr->pw_name);
+	else
+		printf(" %d", (int)s->st_uid);
+	if (grp != NULL)
+		printf(" %s", grp->gr_name);
+	else
+		printf(" %d", (int)s->st_gid);
+	printf(" %d", (int)s->st_size);
+
+	date_string = ctime(&(s->st_mtime));
+	printf(" %.12s %s", &(date_string[4]), fname);
+}
+
+/**
+* print_perms - prints the rwx string
+* @perms: st_mode value
+*/
+void print_perms(int perms)
+{
+	int max = 9;
+	char *out = "rxw";
+
 	if (perms & 16384)
 		printf("d");
+	else if (perms & 8192)
+		printf("l");
 	else
 		printf("-");
 
@@ -108,15 +148,6 @@ void print_details(char *fname, char *parent)
 			printf("-");
 		max--;
 	}
-
-	usr = getpwuid(s.st_uid)->pw_name;
-	grp = getgrgid(s.st_gid)->gr_name;
-	printf(" %d %s %s %d ", (int)s.st_nlink, usr, grp, (int)s.st_size);
-	date_string = ctime(&(s.st_mtime));
-	printf("%.12s %s\n", &(date_string[4]), fname);
-
-	if (parent != NULL)
-		free(path);
 }
 
 /**
