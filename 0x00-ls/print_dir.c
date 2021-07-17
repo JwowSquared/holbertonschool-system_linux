@@ -159,36 +159,27 @@ void print_perms(int perms)
 */
 char *fix_path(char *parent, char *fname)
 {
-	int i = -1, j = -1, size = 0;
+	int i = 0, j = 0, size = 0;
 	char *out;
 
-	while (parent[i + 1])
+	while (parent[i])
 		i++;
 
-	while (fname[j + 1])
+	while (fname[j])
 		j++;
 
-	size = 3 + i + j;
-	if (parent[i] != '/')
+	size = 1 + i + j;
+	if (parent[i - 1] != '/')
 		size++;
 
 	out = malloc(sizeof(char) * size);
 	if (out == NULL)
-		return ("NULL");
+		return (NULL); /* memory error */
 
-	size = 0;
-	while (parent[size])
-	{
-		out[size] = parent[size];
-		size++;
-	}
+	if (parent[i - 1] != '/')
+		sprintf(out, "%s/%s", parent, fname);
+	else
+		sprintf(out, "%s%s", parent, fname);
 
-	if (parent[i] != '/')
-		out[size++] = '/';
-
-	i = 0;
-	while (fname[i])
-		out[size++] = fname[i++];
-	out[size] = '\0';
 	return (out);
 }
