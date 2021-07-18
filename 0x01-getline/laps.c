@@ -58,6 +58,8 @@ car_t *insert_car(car_t **head, int num)
 			out = new_car(num);
 			if (prev != NULL)
 				prev->next = out;
+			else
+				*head = out;
 			out->next = current;
 			return (out);
 		}
