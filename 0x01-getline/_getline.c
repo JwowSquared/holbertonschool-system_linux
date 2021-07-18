@@ -8,73 +8,164 @@
 */
 char *_getline(const int fd)
 {
-	static char *buffer;
-	static int idx;
+	static fd_t *holder_head;
+	fd_t *current, *temp;
+
+	if (fd == -1)
+	{
+		current = holder_head;
+		while (current != NULL)
+		{
+			temp = current;
+			current = current->next;
+			if (temp->buffer != NULL)
+				free(temp->buffer);
+			free(temp);
+		}
+		holder_head = NULL;
+		return (NULL);
+	}
+
+	current = fd_insert(&holder_head, fd);
+	if (current == NULL)
+		return (NULL);
+
+	return (extract_line(current));
+}
+
+/**
+* fd_insert - inserts a new fd_holder into the linked list
+* @head: double pointer to list head
+* @fd: file descriptor that describes the node to create
+*
+* Return: pointer to new node, or existing node that matches fd. else NULL
+*/
+fd_t *fd_insert(fd_t **head, int fd)
+{
+	fd_t *out, *current = *head, *prev = NULL;
+
+	if (*head == NULL)
+	{
+		out = malloc(sizeof(fd_t));
+		if (out == NULL)
+			return (NULL);
+		out->buffer = NULL;
+		out->fd = fd;
+		out->next = NULL;
+		*head = out;
+		return (out);
+	}
+	while (current != NULL)
+	{
+		if (current->fd == fd)
+			return (current);
+		if (current->fd > fd)
+		{
+			out = malloc(sizeof(fd_t));
+			if (out == NULL)
+				return (NULL);
+			out->buffer = NULL;
+			out->fd = fd;
+			out->next = current;
+			if (prev != NULL)
+				prev->next = out;
+			return (out);
+		}
+		prev = current;
+		current = current->next;
+	}
+	out = malloc(sizeof(fd_t));
+	if (out == NULL)
+		return (NULL);
+	out->buffer = NULL;
+	out->fd = fd;
+	out->next = NULL;
+	prev->next = out;
+	return (out);
+}
+
+/**
+* extract_line - gets the next line from a fd_holder
+* @holder: struct holding all necessary info
+*
+* Return: pointer to new string, else NULL
+*/
+char *extract_line(fd_t *holder)
+{
 	int start;
 	char *out = NULL;
 
-	if (buffer == NULL)
+	if (holder->buffer == NULL)
 	{
-		idx = 0;
-		buffer = malloc(sizeof(char) * (READ_SIZE + 1));
-		if (buffer == NULL)
+		holder->idx = 0;
+		holder->buffer = malloc(sizeof(char) * (READ_SIZE + 1));
+		if (holder->buffer == NULL)
 			return (NULL);
-		memset(buffer, 0, READ_SIZE + 1);
-		if (read(fd, buffer, READ_SIZE) == -1)
+		memset(holder->buffer, 0, READ_SIZE + 1);
+		if (read(holder->fd, holder->buffer, READ_SIZE) == -1)
 			return (NULL);
 	}
 
-	start = idx;
-	while (*(buffer + idx) != '\n' && *(buffer + idx) != '\0' && idx < READ_SIZE)
-		idx++;
-
-	if (idx == READ_SIZE)
-		return (end_of_buffer(start, idx, &buffer, fd));
-
-	if (*(buffer + idx) != '\0' || idx != start)
-		out = _strndup(buffer + start, idx - start);
-	if (*(buffer + idx) == '\0')
+	start = holder->idx;
+	while (holder->idx < READ_SIZE)
 	{
-		free(buffer);
-		buffer = NULL;
+		if (holder->buffer[holder->idx] == '\n')
+			break;
+		else if (holder->buffer[holder->idx] == '\0')
+			break;
+		holder->idx++;
 	}
-	if (idx < READ_SIZE)
-		idx++;
+
+	if (holder->idx == READ_SIZE)
+		return (end_of_buffer(holder, start));
+
+	if (holder->buffer[holder->idx] != '\0' || holder->idx != start)
+		out = _strndup(holder->buffer + start, holder->idx - start);
+	if (holder->buffer[holder->idx] == '\0')
+	{
+		free(holder->buffer);
+		holder->buffer = NULL;
+	}
+	if (holder->idx < READ_SIZE)
+		holder->idx++;
 
 	return (out);
 }
 
 /**
 * end_of_buffer - this handles lines that need multiple reads
+* @holder: struct holding all necessary info
 * @start: left bound of string
-* @idx: right bound of string
-* @buffer: double pointer to buffer so it can be freed
-* @fd: file descriptor passed in _getline function
 *
 * Return: full line string, else NULL
 */
-char *end_of_buffer(int start, int idx, char **buffer, int fd)
+char *end_of_buffer(fd_t *holder, int start)
 {
 	char *out = NULL, *temp = NULL;
+	int i = 0, j = 0;
 
-	if (start != idx)
-		out = strdup((*buffer) + start);
+	if (start != holder->idx)
+		out = strdup(holder->buffer + start);
 	else
 		out = NULL;
-	free(*buffer);
-	*buffer = NULL;
-	temp = _getline(fd);
+	free(holder->buffer);
+	holder->buffer = NULL;
+	temp = extract_line(holder);
 	if (temp == NULL)
 	{
 		if (out != NULL)
 			free(out);
-		if (*buffer != NULL)
-			free(*buffer);
+		if (holder->buffer != NULL)
+			free(holder->buffer);
 		return (NULL);
 	}
 	if (out != NULL)
 	{
-		out = realloc(out, 1 + _strlen(out) + _strlen(temp));
+		while (out[i])
+			i++;
+		while (temp[j])
+			j++;
+		out = realloc(out, 1 + i + j);
 		strcat(out, temp);
 		free(temp);
 	}
@@ -107,23 +198,4 @@ char *_strndup(char *src, int n)
 
 	out[n] = '\0';
 	return (out);
-}
-
-/**
-* _strlen - returns length of input string
-* @input: string to determine the length of
-*
-* Return: length of input string, else 0
-*/
-int _strlen(char *input)
-{
-	int i = 0;
-
-	if (input == NULL)
-		return (0);
-
-	while (input[i])
-		i++;
-
-	return (i);
 }

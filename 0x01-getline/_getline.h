@@ -9,9 +9,17 @@
 #include <stdlib.h>
 #include <string.h>
 
+typedef struct fd_holder {
+	char *buffer;
+	int idx;
+	int fd;
+	struct fd_holder *next;
+} fd_t;
+
 char *_getline(const int fd);
-int _strlen(char *);
-char *end_of_buffer(int, int, char **, int);
+char *extract_line(fd_t *);
+char *end_of_buffer(fd_t *, int);
+fd_t *fd_insert(fd_t **head, int fd);
 char *_strndup(char *, int);
 
 #endif /* _GETLINE_H_ */
