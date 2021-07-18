@@ -4,7 +4,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct car {
+/**
+* struct car - a linked list node with an id and lap counter
+* @num: id of car
+* @laps: number of times race_state has been called with this id
+* @next: car pointer to next node in linked list
+*
+* Description: holds all necessary info for use with race_state
+*/
+typedef struct car
+{
 	int num;
 	int laps;
 	struct car *next;

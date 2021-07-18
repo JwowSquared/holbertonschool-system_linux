@@ -9,7 +9,17 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct fd_holder {
+/**
+* struct fd_holder - struct for handling file descriptors with _getline
+* @buffer: char buffer holding output from read()
+* @idx: current left index of next line
+* @fd: file descriptor to be used with read()
+* @next: pointer to next fd_holder in a linked list
+*
+* Description: all necessary info for _getline with multiple fds
+*/
+typedef struct fd_holder
+{
 	char *buffer;
 	int idx;
 	int fd;

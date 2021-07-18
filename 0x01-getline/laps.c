@@ -9,7 +9,7 @@
 void race_state(int *id, size_t size)
 {
 	size_t idx = 0;
-	static car_t *car_head = NULL;
+	static car_t *car_head;
 
 	if (size == 0)
 		free_race(&car_head);
