@@ -102,21 +102,22 @@ char *extract_line(fd_t *holder)
 		if (holder->buffer == NULL)
 			return (NULL);
 		memset(holder->buffer, 0, READ_SIZE + 1);
-		if (read(holder->fd, holder->buffer, READ_SIZE) == -1)
+		holder->len = read(holder->fd, holder->buffer, READ_SIZE);
+		if (holder->len == -1)
 			return (NULL);
+	}
+	if (holder->len == 0)
+	{
+		free(holder->buffer);
+		holder->buffer = NULL;
+		return (NULL);
 	}
 
 	start = holder->idx;
-	while (holder->idx < READ_SIZE)
-	{
-		if (holder->buffer[holder->idx] == '\n')
-			break;
-		else if (holder->buffer[holder->idx] == '\0')
-			break;
+	while (holder->idx < holder->len && holder->buffer[holder->idx] != '\n')
 		holder->idx++;
-	}
 
-	if (holder->idx == READ_SIZE)
+	if (holder->idx == holder->len)
 		return (end_of_buffer(holder, start));
 
 	if (holder->buffer[holder->idx] != '\0' || holder->idx != start)
@@ -126,7 +127,7 @@ char *extract_line(fd_t *holder)
 		free(holder->buffer);
 		holder->buffer = NULL;
 	}
-	if (holder->idx < READ_SIZE)
+	if (holder->idx < holder->len)
 		holder->idx++;
 
 	return (out);

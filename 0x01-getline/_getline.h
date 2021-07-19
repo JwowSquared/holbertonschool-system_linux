@@ -14,6 +14,7 @@
 * @buffer: char buffer holding output from read()
 * @idx: current left index of next line
 * @fd: file descriptor to be used with read()
+* @len: return value of read
 * @next: pointer to next fd_holder in a linked list
 *
 * Description: all necessary info for _getline with multiple fds
@@ -23,6 +24,7 @@ typedef struct fd_holder
 	char *buffer;
 	int idx;
 	int fd;
+	int len;
 	struct fd_holder *next;
 } fd_t;
 
