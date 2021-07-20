@@ -146,7 +146,7 @@ char *end_of_buffer(fd_t *holder, int start)
 	int i = 0, j = 0;
 
 	if (start != holder->idx)
-		out = strdup(holder->buffer + start);
+		out = _strndup(holder->buffer + start, holder->idx - start);
 	else
 		out = NULL;
 	free(holder->buffer);
