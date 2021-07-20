@@ -117,10 +117,10 @@ char *extract_line(fd_t *holder)
 	while (holder->idx < holder->len && holder->buffer[holder->idx] != '\n')
 		holder->idx++;
 
-	if (holder->idx == holder->len)
+	if (holder->idx == holder->len && holder->len == READ_SIZE)
 		return (end_of_buffer(holder, start));
 
-	if (holder->buffer[holder->idx] != '\0' || holder->idx != start)
+	if (holder->idx != start)
 		out = _strndup(holder->buffer + start, holder->idx - start);
 	if (holder->buffer[holder->idx] == '\0')
 	{
