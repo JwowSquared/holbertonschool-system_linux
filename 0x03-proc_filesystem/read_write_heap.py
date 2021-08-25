@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 '''             
 Locates and replaces the first occurrence of a string in the heap
 of a process    
