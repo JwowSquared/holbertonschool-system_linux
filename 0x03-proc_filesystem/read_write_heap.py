@@ -30,7 +30,7 @@ if search_string  == "":
     print_usage_and_exit()
 if len(sys.argv) == 4:
     write_string = str(sys.argv[3])
-else
+else:
     write_string = ""
 # open the maps and mem files of the process
 maps_filename = "/proc/{}/maps".format(pid)
