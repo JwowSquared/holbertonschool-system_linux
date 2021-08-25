@@ -18,7 +18,7 @@ def print_usage_and_exit():
     sys.exit(1)
 
 # check usage  
-if len(sys.argv) != 4:
+if len(sys.argv) < 3 or len(sys.argv) > 4:
     print_usage_and_exit()
 
 # get the pid from args
@@ -28,8 +28,10 @@ if pid <= 0:
 search_string = str(sys.argv[2])
 if search_string  == "":
     print_usage_and_exit()
-write_string = str(sys.argv[3])
-
+if len(sys.argv) == 4:
+    write_string = str(sys.argv[3])
+else
+    write_string = ""
 # open the maps and mem files of the process
 maps_filename = "/proc/{}/maps".format(pid)
 print("[*] maps: {}".format(maps_filename))
