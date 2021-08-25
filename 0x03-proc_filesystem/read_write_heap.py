@@ -29,8 +29,6 @@ search_string = str(sys.argv[2])
 if search_string  == "":
     print_usage_and_exit()
 write_string = str(sys.argv[3])
-if search_string  == "":
-    print_usage_and_exit()
 
 # open the maps and mem files of the process
 maps_filename = "/proc/{}/maps".format(pid)
