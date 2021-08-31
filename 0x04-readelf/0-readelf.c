@@ -21,7 +21,7 @@ int main(int ac, char **av)
 		printf("  Magic:  "); /* confirmed */
 		for (i = 0; i < EI_NIDENT; i++)
 			printf(" %02x", header.e_ident[i]);
-		printf("\n");
+		printf(" \n");
 		/* Class */
 		printf("  Class:                             ");
 		if (header.e_ident[EI_CLASS] == ELFCLASS32)
