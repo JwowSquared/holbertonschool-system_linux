@@ -103,7 +103,7 @@ void printElf_32(FILE *file)
 	if (header.e_machine == EM_M32)
 		printf("AT&T WE 32100\n");
 	else if (header.e_machine == EM_SPARC)
-		printf("Sun Microsystems SPARC\n");
+		printf("Sparc\n");
 	else if (header.e_machine == EM_386)
 		printf("Intel 80386\n"); /* confirmed */
 	else if (header.e_machine == EM_68K)
@@ -233,7 +233,7 @@ void printElf_64(FILE *file)
 	if (header.e_machine == EM_M32)
 		printf("AT&T WE 32100\n");
 	else if (header.e_machine == EM_SPARC)
-		printf("Sun Microsystems SPARC\n");
+		printf("Sparc\n");
 	else if (header.e_machine == EM_386)
 		printf("Intel 80386\n"); /* confirmed */
 	else if (header.e_machine == EM_68K)
