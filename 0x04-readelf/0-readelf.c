@@ -2,8 +2,8 @@
 
 int main(int ac, char **av)
 {
-	FILE* file = NULL;
-	Elf64_Ehdr header;
+	FILE *file = NULL;
+	Elf32_Ehdr header;
 	int i;
 
 	if (ac != 2)
@@ -129,16 +129,16 @@ int main(int ac, char **av)
 			printf("0x1\n");
 		else
 			printf("UNKNOWN\n");
-		printf("  Entry point address:               0x%lx\n", (unsigned long int)header.e_entry);
-		printf("  Start of program headers:          %lu (bytes into file)\n", (unsigned long int)header.e_phoff);
-		printf("  Start of section headers:          %lu (bytes into file)\n", (unsigned long int)header.e_shoff);
+		printf("  Entry point address:               0x%x\n", (unsigned int)header.e_entry);
+		printf("  Start of program headers:          %u (bytes into file)\n", (unsigned int)header.e_phoff);
+		printf("  Start of section headers:          %u (bytes into file)\n", (unsigned int)header.e_shoff);
 		printf("  Flags:                             0x0\n");
-		printf("  Size of this header:               %lu (bytes)\n", (unsigned long int)header.e_ehsize);
-		printf("  Size of program headers:           %lu (bytes)\n", (unsigned long int)header.e_phentsize);
-		printf("  Number of program headers:         %lu\n", (unsigned long int)header.e_phnum);
-		printf("  Size of section headers:           %lu (bytes)\n", (unsigned long int)header.e_shentsize);
-		printf("  Number of section headers:         %lu\n", (unsigned long int)header.e_shnum);
-		printf("  Section header string table index: %lu\n", (unsigned long int)header.e_shstrndx);
+		printf("  Size of this header:               %u (bytes)\n", (unsigned int)header.e_ehsize);
+		printf("  Size of program headers:           %u (bytes)\n", (unsigned int)header.e_phentsize);
+		printf("  Number of program headers:         %u\n", (unsigned int)header.e_phnum);
+		printf("  Size of section headers:           %u (bytes)\n", (unsigned int)header.e_shentsize);
+		printf("  Number of section headers:         %u\n", (unsigned int)header.e_shnum);
+		printf("  Section header string table index: %u\n", (unsigned int)header.e_shstrndx);
 	}
 
 	fclose(file);
