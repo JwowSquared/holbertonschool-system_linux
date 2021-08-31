@@ -2,6 +2,10 @@
 
 void flip32_0(Elf32_Ehdr *header)
 {
+	printf("TEST short= %lu\n", sizeof(short));
+	printf("TEST int= %lu\n", sizeof(int));
+	printf("TEST long int= %lu\n", sizeof(long));
+
 	printf("TEST type= %lu\n", sizeof(header->e_type));
 	printf("TEST machine= %lu\n", sizeof(header->e_machine));
 	printf("TEST version= %lu\n", sizeof(header->e_version));
