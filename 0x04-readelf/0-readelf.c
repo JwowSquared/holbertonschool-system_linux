@@ -78,7 +78,7 @@ int main(int ac, char **av)
 		else if (header.e_type == ET_EXEC)
 			printf("EXEC (Executable file)\n"); /* confirmed */
 		else if (header.e_type == ET_DYN)
-			printf("A shared object\n");
+			printf("DYN (Shared object file)\n");
 		else if (header.e_type == ET_CORE)
 			printf("A core file\n");
 		else
