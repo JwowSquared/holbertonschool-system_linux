@@ -7,7 +7,8 @@
 void printElf_32(FILE *);
 void printElf_64(FILE *);
 
-void flip32_0(Elf32_Ehdr *header);
-void flip64_0(Elf64_Ehdr *header);
+unsigned long int flipEndian(unsigned long int, int);
+void flip32_0(Elf32_Ehdr *);
+void flip64_0(Elf64_Ehdr *);
 
 #endif /* _HBTN_ELF_*/

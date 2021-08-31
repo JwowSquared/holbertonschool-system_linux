@@ -2,42 +2,34 @@
 
 void flip32_0(Elf32_Ehdr *header)
 {
-	printf("TEST short= %lu\n", sizeof(short));
-	printf("TEST int= %lu\n", sizeof(int));
-	printf("TEST long int= %lu\n", sizeof(long));
-
-	printf("TEST type= %lu\n", sizeof(header->e_type));
-	printf("TEST machine= %lu\n", sizeof(header->e_machine));
-	printf("TEST version= %lu\n", sizeof(header->e_version));
-	printf("TEST entry= %lu\n", sizeof(header->e_entry));
-	printf("TEST phoff= %lu\n", sizeof(header->e_phoff));
-	printf("TEST shoff= %lu\n", sizeof(header->e_shoff));
-	printf("TEST flags= %lu\n", sizeof(header->e_flags));
-	printf("TEST ehsize= %lu\n", sizeof(header->e_ehsize));
-	printf("TEST phentsize= %lu\n", sizeof(header->e_phentsize));
-	printf("TEST phnum= %lu\n", sizeof(header->e_phnum));
-	printf("TEST shentsize= %lu\n", sizeof(header->e_shentsize));
-	printf("TEST shnum= %lu\n", sizeof(header->e_shnum));
-	printf("TEST shstrndx= %lu\n", sizeof(header->e_shstrndx));
+	header->e_type = (unsigned short)flipEndian(header->e_type, 16);
+	header->e_machine = (unsigned short)flipEndian(header->e_machine, 16);
+	header->e_version = (unsigned int)flipEndian(header->e_version, 32);
+	header->e_entry = (unsigned int)flipEndian(header->e_entry, 32);
+	header->e_phoff = (unsigned int)flipEndian(header->e_phoff, 32);
+	header->e_shoff = (unsigned int)flipEndian(header->e_shoff, 32);
+	header->e_flags = (unsigned int)flipEndian(header->e_flags, 32);
+	header->e_ehsize = (unsigned short)flipEndian(header->e_ehsize, 16);
+	header->e_phentsize = (unsigned short)flipEndian(header->e_phentsize, 16);
+	header->e_phnum = (unsigned short)flipEndian(header->e_phnum, 16);
+	header->e_shentsize = (unsigned short)flipEndian(header->e_shentsize, 16);
+	header->e_shnum = (unsigned short)flipEndian(header->e_shnum, 16);
+	header->e_shstrndx = (unsigned short)flipEndian(header->e_shstrndx, 16);
 }
 
 void flip64_0(Elf64_Ehdr *header)
 {
-	printf("TEST short= %lu\n", sizeof(short));
-	printf("TEST int= %lu\n", sizeof(int));
-	printf("TEST long int= %lu\n", sizeof(long));
-
-	printf("TEST type= %lu\n", sizeof(header->e_type));
-	printf("TEST machine= %lu\n", sizeof(header->e_machine));
-	printf("TEST version= %lu\n", sizeof(header->e_version));
-	printf("TEST entry= %lu\n", sizeof(header->e_entry));
-	printf("TEST phoff= %lu\n", sizeof(header->e_phoff));
-	printf("TEST shoff= %lu\n", sizeof(header->e_shoff));
-	printf("TEST flags= %lu\n", sizeof(header->e_flags));
-	printf("TEST ehsize= %lu\n", sizeof(header->e_ehsize));
-	printf("TEST phentsize= %lu\n", sizeof(header->e_phentsize));
-	printf("TEST phnum= %lu\n", sizeof(header->e_phnum));
-	printf("TEST shentsize= %lu\n", sizeof(header->e_shentsize));
-	printf("TEST shnum= %lu\n", sizeof(header->e_shnum));
-	printf("TEST shstrndx= %lu\n", sizeof(header->e_shstrndx));
+	header->e_type = (unsigned short)flipEndian(header->e_type, 16);
+	header->e_machine = (unsigned short)flipEndian(header->e_machine, 16);
+	header->e_version = (unsigned int)flipEndian(header->e_version, 32);
+	header->e_entry = (unsigned long int)flipEndian(header->e_entry, 64);
+	header->e_phoff = (unsigned long int)flipEndian(header->e_phoff, 64);
+	header->e_shoff = (unsigned long int)flipEndian(header->e_shoff, 64);
+	header->e_flags = (unsigned int)flipEndian(header->e_flags, 32);
+	header->e_ehsize = (unsigned short)flipEndian(header->e_ehsize, 16);
+	header->e_phentsize = (unsigned short)flipEndian(header->e_phentsize, 16);
+	header->e_phnum = (unsigned short)flipEndian(header->e_phnum, 16);
+	header->e_shentsize = (unsigned short)flipEndian(header->e_shentsize, 16);
+	header->e_shnum = (unsigned short)flipEndian(header->e_shnum, 16);
+	header->e_shstrndx = (unsigned short)flipEndian(header->e_shstrndx, 16);
 }

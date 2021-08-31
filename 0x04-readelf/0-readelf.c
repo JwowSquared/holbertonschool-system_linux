@@ -162,7 +162,7 @@ void printElf_64(FILE *file)
 	int i;
 
 	fread(&header, sizeof(header), 1, file);
-	flip64_0(&header);
+
 	printf("ELF Header:\n");
 	/* Magic */
 	printf("  Magic:  "); /* confirmed */
