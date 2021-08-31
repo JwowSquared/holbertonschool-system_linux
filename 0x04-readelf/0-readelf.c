@@ -67,7 +67,7 @@ int main(int ac, char **av)
 		else if (header.e_ident[EI_OSABI] == ELFOSABI_STANDALONE)
 			printf("Stand-alone (embedded)\n");
 		else
-			printf("<unknown: %u>\n", header.e_ident[EI_OSABI]);
+			printf("<unknown: %02x>\n", header.e_ident[EI_OSABI]);
 		/* ABI Version */
 		printf("  ABI Version:                       ");
 		printf("%u\n", (unsigned int)header.e_ident[EI_ABIVERSION]);
