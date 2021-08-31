@@ -70,7 +70,7 @@ int main(int ac, char **av)
 			printf("UNIX - System V\n");
 		/* ABI Version */
 		printf("  ABI Version:                       ");
-		printf("0\n");
+		printf("%u\n", (unsigned int)header.e_ident[EI_ABIVERSION]);
 		/* Type */
 		printf("  Type:                              ");
 		if (header.e_type == ET_REL)
