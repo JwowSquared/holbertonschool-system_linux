@@ -41,18 +41,16 @@ void printElf_32(FILE *file)
 	printf(" \n");
 	/* Class */
 	printf("  Class:                             ");
-	if (header.e_ident[EI_CLASS] == ELFCLASS32)
-		printf("ELF32\n");
-	else if (header.e_ident[EI_CLASS] == ELFCLASS64)
-		printf("ELF64\n"); /* confirmed */
-	else
-		printf("UNKNOWN\n");
+	printf("ELF32\n");
 	/* Data */
 	printf("  Data:                              ");
 	if (header.e_ident[EI_DATA] == ELFDATA2LSB)
 		printf("2's complement, little endian\n"); /* confirmed */
 	else if (header.e_ident[EI_DATA] == ELFDATA2MSB)
+	{
 		printf("2's complement, big endian\n");
+		flip32_0(&header);
+	}
 	else
 		printf("UNKNOWN\n");
 	/* Version */
@@ -164,6 +162,7 @@ void printElf_64(FILE *file)
 	int i;
 
 	fread(&header, sizeof(header), 1, file);
+	flip64_0(&header);
 	printf("ELF Header:\n");
 	/* Magic */
 	printf("  Magic:  "); /* confirmed */
@@ -172,18 +171,16 @@ void printElf_64(FILE *file)
 	printf(" \n");
 	/* Class */
 	printf("  Class:                             ");
-	if (header.e_ident[EI_CLASS] == ELFCLASS32)
-		printf("ELF32\n");
-	else if (header.e_ident[EI_CLASS] == ELFCLASS64)
-		printf("ELF64\n"); /* confirmed */
-	else
-		printf("UNKNOWN\n");
+	printf("ELF64\n"); /* confirmed */
 	/* Data */
 	printf("  Data:                              ");
 	if (header.e_ident[EI_DATA] == ELFDATA2LSB)
 		printf("2's complement, little endian\n"); /* confirmed */
 	else if (header.e_ident[EI_DATA] == ELFDATA2MSB)
+	{
 		printf("2's complement, big endian\n");
+		flip64_0(&header);
+	}
 	else
 		printf("UNKNOWN\n");
 	/* Version */
