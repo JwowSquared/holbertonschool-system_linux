@@ -51,7 +51,7 @@ int main(int ac, char **av)
 		else if (header.e_ident[EI_OSABI] == ELFOSABI_HPUX)
 			printf("HP-UX\n");
 		else if (header.e_ident[EI_OSABI] == ELFOSABI_NETBSD)
-			printf("NetBSD\n");
+			printf("UNIX - NetBSD\n"); /* confirmed */
 		else if (header.e_ident[EI_OSABI] == ELFOSABI_LINUX)
 			printf("Linux\n");
 		else if (header.e_ident[EI_OSABI] == ELFOSABI_SOLARIS)
