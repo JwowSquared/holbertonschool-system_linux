@@ -1,4 +1,4 @@
-all: 0-readelf
+all: 0-hreadelf
 
 files-0 = \
 0-readelf.c

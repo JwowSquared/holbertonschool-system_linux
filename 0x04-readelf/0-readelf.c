@@ -55,7 +55,7 @@ int main(int ac, char **av)
 		else if (header.e_ident[EI_OSABI] == ELFOSABI_LINUX)
 			printf("Linux\n");
 		else if (header.e_ident[EI_OSABI] == ELFOSABI_SOLARIS)
-			printf("Solaris\n");
+			printf("UNIX - Solaris\n"); /* confirmed */
 		else if (header.e_ident[EI_OSABI] == ELFOSABI_IRIX)
 			printf("IRIX\n");
 		else if (header.e_ident[EI_OSABI] == ELFOSABI_FREEBSD)
@@ -90,7 +90,7 @@ int main(int ac, char **av)
 		else if (header.e_machine == EM_SPARC)
 			printf("Sun Microsystems SPARC\n");
 		else if (header.e_machine == EM_386)
-			printf("Intel 80386\n");
+			printf("Intel 80386\n"); /* confirmed */
 		else if (header.e_machine == EM_68K)
 			printf("Motorola 68000\n");
 		else if (header.e_machine == EM_88K)
@@ -118,7 +118,7 @@ int main(int ac, char **av)
 		else if (header.e_machine == EM_IA_64)
 			printf("Intel Itanium\n");
 		else if (header.e_machine == EM_X86_64)
-			printf("AMD x86-64\n");
+			printf("Advanced Micro Devices X86-64\n"); /* confirmed */
 		else if (header.e_machine == EM_VAX)
 			printf("Dec Vax\n");
 		else
