@@ -13,5 +13,5 @@ unsigned long int flipEndian(unsigned long int num, int size)
 	right = flipEndian(right, size / 2);
 	left = flipEndian(left, size / 2);
 
-	return (left & (right << (size / 2)));
+	return (left | (right << (size / 2)));
 }
