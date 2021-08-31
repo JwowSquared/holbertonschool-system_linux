@@ -3,7 +3,7 @@
 int main(int ac, char **av)
 {
 	FILE *file = NULL;
-	Elf32_Ehdr header;
+	Elf64_Ehdr header;
 	int i;
 
 	if (ac != 2)
