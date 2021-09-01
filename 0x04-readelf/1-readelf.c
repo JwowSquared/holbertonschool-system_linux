@@ -117,6 +117,16 @@ void print_section_64(FILE *file)
 		cur = &f_right;
 		f_left = ' ';
 		f_right = ' ';
+		if (section.sh_flags & SHF_EXECINSTR)
+		{
+			*cur = 'X';
+			cur = &f_left;
+		}
+		if (section.sh_flags & SHF_INFO_LINK)
+		{
+			*cur = 'I';
+			cur = &f_left;
+		}
 		if (section.sh_flags & SHF_ALLOC)
 		{
 			*cur = 'A';
@@ -125,11 +135,6 @@ void print_section_64(FILE *file)
 		if (section.sh_flags & SHF_WRITE)
 		{
 			*cur = 'W';
-			cur = &f_left;
-		}
-		if (section.sh_flags & SHF_EXECINSTR)
-		{
-			*cur = 'X';
 			cur = &f_left;
 		}
 		if (section.sh_flags & SHF_MERGE)
@@ -142,7 +147,7 @@ void print_section_64(FILE *file)
 			*cur = 'S';
 			cur = &f_left;
 		}
-		printf("%c%c ", f_left, f_right);
+		printf(" %c%c ", f_left, f_right);
 		printf("%2u ", (unsigned int)section.sh_link);
 		printf("%3u ", (unsigned int)section.sh_info);
 		printf("%2u\n", (unsigned int)section.sh_addralign);
