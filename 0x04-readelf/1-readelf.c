@@ -89,7 +89,7 @@ void print_section_32(FILE *file)
 		else
 			printf("UNKNOWN         ");
 
-		printf("%016x ", (unsigned int)section.sh_addr);
+		printf("%08x ", (unsigned int)section.sh_addr);
 		printf("%06x ", (unsigned int)section.sh_offset);
 		printf("%06x ", (unsigned int)section.sh_size);
 		printf("%02x ", (unsigned int)section.sh_entsize);
