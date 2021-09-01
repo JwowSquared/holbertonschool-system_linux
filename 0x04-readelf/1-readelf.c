@@ -86,6 +86,12 @@ void print_section_32(FILE *file)
 			printf("INIT_ARRAY      ");
 		else if (section.sh_type == SHT_FINI_ARRAY)
 			printf("FINI_ARRAY      ");
+		else if (section.sh_type == SHT_GNU_verdef)
+			printf("VERDEF          ");
+		else if (section.sh_type == LOOS_1)
+			printf("LOOS+ffffff1    ");
+		else if (section.sh_type == LOOS_3)
+			printf("LOOS+ffffff3    ");
 		else
 			printf("UNKNOWN         ");
 
@@ -182,6 +188,12 @@ void print_section_64(FILE *file)
 			printf("INIT_ARRAY      ");
 		else if (section.sh_type == SHT_FINI_ARRAY)
 			printf("FINI_ARRAY      ");
+		else if (section.sh_type == SHT_GNU_verdef)
+			printf("VERDEF          ");
+		else if (section.sh_type == LOOS_1)
+			printf("LOOS+ffffff1    ");
+		else if (section.sh_type == LOOS_3)
+			printf("LOOS+ffffff3    ");
 		else
 			printf("UNKNOWN         ");
 

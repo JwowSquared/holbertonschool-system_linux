@@ -12,6 +12,9 @@ void print_elf_64(FILE *);
 void flip32_0(Elf32_Ehdr *);
 void flip64_0(Elf64_Ehdr *);
 
+#define LOOS_1 0x6ffffff1
+#define LOOS_3 0x6ffffff3
+
 void print_section_32(FILE *);
 void print_section_64(FILE *);
 
