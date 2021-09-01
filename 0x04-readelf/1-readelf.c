@@ -46,7 +46,7 @@ void print_section_32(FILE *file)
 
 	printf("There are %d section headers, starting at offset 0x%04x:\n", header.e_shnum, (unsigned int)header.e_shoff);
 	printf("\nSection Headers:\n");
-	printf("  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al\n");
+	printf("  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al\n");
 	for (i = 0; i < header.e_shnum; i++)
 	{
 		fread(&section, sizeof(section), 1, file);
