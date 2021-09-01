@@ -54,8 +54,8 @@ void print_section_64(FILE *file)
 	Elf64_Ehdr header;
 	Elf64_Shdr str_table;
 	Elf64_Shdr section;
-	char *names = NULL, f_left, f_right, *cur = NULL;
-	int i;
+	char *names = NULL, flags[3];
+	int i, j;
 
 	fread(&header, sizeof(header), 1, file);
 	fseek(file, (unsigned int)header.e_shoff + sizeof(section) * (unsigned int)header.e_shstrndx, SEEK_SET);
@@ -114,40 +114,24 @@ void print_section_64(FILE *file)
 		printf("%06lx ", (unsigned long int)section.sh_offset);
 		printf("%06x ", (unsigned int)section.sh_size);
 		printf("%02x ", (unsigned int)section.sh_entsize);
-		cur = &f_right;
-		f_left = ' ';
-		f_right = ' ';
+		for (j = 0; j < 3; j++)
+			flags[j] = ' ';
+		j = 2;
 		if (section.sh_flags & SHF_EXECINSTR)
-		{
-			*cur = 'X';
-			cur = &f_left;
-		}
+			flags[j--] = 'X';
 		if (section.sh_flags & SHF_INFO_LINK)
-		{
-			*cur = 'I';
-			cur = &f_left;
-		}
-		if (section.sh_flags & SHF_ALLOC)
-		{
-			*cur = 'A';
-			cur = &f_left;
-		}
+			flags[j--] = 'I';
 		if (section.sh_flags & SHF_WRITE)
-		{
-			*cur = 'W';
-			cur = &f_left;
-		}
+			flags[j--] = 'W';
 		if (section.sh_flags & SHF_STRINGS)
-		{
-			*cur = 'S';
-			cur = &f_left;
-		}
+			flags[j--] = 'S';
 		if (section.sh_flags & SHF_MERGE)
-		{
-			*cur = 'M';
-			cur = &f_left;
-		}
-		printf(" %c%c ", f_left, f_right);
+			flags[j--] = 'M';
+		if (section.sh_flags & SHF_ALLOC)
+			flags[j--] = 'A';
+		if (section.sh_flags & SHF_EXCLUDE)
+			flags[j--] = 'E';
+		printf("%c%c%c ", flags[0], flags[1], flags[2]);
 		printf("%2u ", (unsigned int)section.sh_link);
 		printf("%3u ", (unsigned int)section.sh_info);
 		printf("%2u\n", (unsigned int)section.sh_addralign);
