@@ -137,14 +137,14 @@ void print_section_64(FILE *file)
 			*cur = 'W';
 			cur = &f_left;
 		}
-		if (section.sh_flags & SHF_MERGE)
-		{
-			*cur = 'M';
-			cur = &f_left;
-		}
 		if (section.sh_flags & SHF_STRINGS)
 		{
 			*cur = 'S';
+			cur = &f_left;
+		}
+		if (section.sh_flags & SHF_MERGE)
+		{
+			*cur = 'M';
 			cur = &f_left;
 		}
 		printf(" %c%c ", f_left, f_right);
