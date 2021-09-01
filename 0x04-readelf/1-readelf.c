@@ -44,7 +44,7 @@ void print_section_32(FILE *file)
 	fread(names, str_table.sh_size, 1, file);
 	fseek(file, header.e_shoff, SEEK_SET);
 
-	printf("There are %d section headers, starting at offset 0x%04x:\n", header.e_shnum, (unsigned int)header.e_shoff);
+	printf("There are %d section headers, starting at offset 0x%x:\n", header.e_shnum, (unsigned int)header.e_shoff);
 	printf("\nSection Headers:\n");
 	printf("  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al\n");
 	for (i = 0; i < header.e_shnum; i++)
@@ -117,7 +117,7 @@ void print_section_32(FILE *file)
 	}
 
 printf("Key to Flags:\n");
-printf("  W (write), A (alloc), X (execute), M (merge), S (strings), l (large)\n");
+printf("  W (write), A (alloc), X (execute), M (merge), S (strings)\n");
 printf("  I (info), L (link order), G (group), T (TLS), E (exclude), x (unknown)\n");
 printf("  O (extra OS processing required) o (OS specific), p (processor specific)\n");
 
@@ -140,7 +140,7 @@ void print_section_64(FILE *file)
 	fread(names, str_table.sh_size, 1, file);
 	fseek(file, header.e_shoff, SEEK_SET);
 
-	printf("There are %d section headers, starting at offset 0x%04x:\n", header.e_shnum, (unsigned int)header.e_shoff);
+	printf("There are %d section headers, starting at offset 0x%x:\n", header.e_shnum, (unsigned int)header.e_shoff);
 	printf("\nSection Headers:\n");
 	printf("  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al\n");
 	for (i = 0; i < header.e_shnum; i++)
