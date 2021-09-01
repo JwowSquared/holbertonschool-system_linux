@@ -54,7 +54,7 @@ void print_section_64(FILE *file)
 	Elf64_Ehdr header;
 	Elf64_Shdr str_table;
 	Elf64_Shdr section;
-	char *names = NULL;
+	char *names = NULL, f_left, f_right, *cur = NULL;
 	int i;
 
 	fread(&header, sizeof(header), 1, file);
@@ -71,7 +71,7 @@ void print_section_64(FILE *file)
 	for (i = 0; i < header.e_shnum; i++)
 	{
 		fread(&section, sizeof(section), 1, file);
-		printf("  [%-2d] ", i);
+		printf("  [%2d] ", i);
 		printf("%-17s ", names + section.sh_name);
 		if (section.sh_type == SHT_NULL)
 			printf("NULL            ");
@@ -97,27 +97,55 @@ void print_section_64(FILE *file)
 			printf("SHLIB           ");
 		else if (section.sh_type == SHT_DYNSYM)
 			printf("DYNSYM          ");
+		else if (section.sh_type == SHT_GNU_HASH)
+			printf("GNU_HASH        ");
+		else if (section.sh_type == SHT_GNU_versym)
+			printf("VERSYM          ");
+		else if (section.sh_type == SHT_GNU_verneed)
+			printf("VERNEED         ");
+		else if (section.sh_type == SHT_INIT_ARRAY)
+			printf("INIT_ARRAY      ");
+		else if (section.sh_type == SHT_FINI_ARRAY)
+			printf("FINI_ARRAY      ");
 		else
 			printf("UNKNOWN         ");
 
 		printf("%016lx ", (unsigned long int)section.sh_addr);
 		printf("%06lx ", (unsigned long int)section.sh_offset);
 		printf("%06x ", (unsigned int)section.sh_size);
-		printf("%02x ", (unsigned int)section.sh_entsize);	
-		if (section.sh_flags & SHF_WRITE)
-			printf("W");
+		printf("%02x ", (unsigned int)section.sh_entsize);
+		cur = &f_right;
+		f_left = ' ';
+		f_right = ' ';
 		if (section.sh_flags & SHF_ALLOC)
-			printf("A");
+		{
+			*cur = 'A';
+			cur = &f_left;
+		}
+		if (section.sh_flags & SHF_WRITE)
+		{
+			*cur = 'W';
+			cur = &f_left;
+		}
 		if (section.sh_flags & SHF_EXECINSTR)
-			printf("X");
+		{
+			*cur = 'X';
+			cur = &f_left;
+		}
 		if (section.sh_flags & SHF_MERGE)
-			printf("M");
+		{
+			*cur = 'M';
+			cur = &f_left;
+		}
 		if (section.sh_flags & SHF_STRINGS)
-			printf("S");
-		printf(" ");
-		printf("%u ", (unsigned int)section.sh_link);
-		printf("%u ", (unsigned int)section.sh_info);
-		printf("%u\n", (unsigned int)section.sh_addralign);
+		{
+			*cur = 'S';
+			cur = &f_left;
+		}
+		printf("%c%c ", f_left, f_right);
+		printf("%2u ", (unsigned int)section.sh_link);
+		printf("%3u ", (unsigned int)section.sh_info);
+		printf("%2u\n", (unsigned int)section.sh_addralign);
 	}
 
 printf("Key to Flags:\n");

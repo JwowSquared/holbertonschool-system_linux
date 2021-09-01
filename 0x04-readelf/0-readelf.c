@@ -17,9 +17,9 @@ int main(int ac, char **av)
 		fread(&magic, sizeof(magic), 1, file);
 		fseek(file, 0, SEEK_SET);
 		if (magic[EI_CLASS] == ELFCLASS32)
-			printElf_32(file);
+			print_elf_32(file);
 		else if (magic[EI_CLASS] == ELFCLASS64)
-			printElf_64(file);
+			print_elf_64(file);
 	}
 
 	fclose(file);
@@ -27,7 +27,7 @@ int main(int ac, char **av)
 	return (0);
 }
 
-void printElf_32(FILE *file)
+void print_elf_32(FILE *file)
 {
 	Elf32_Ehdr header;
 	int i;
@@ -156,7 +156,7 @@ void printElf_32(FILE *file)
 	printf("  Section header string table index: %u\n", (unsigned int)header.e_shstrndx);
 }
 
-void printElf_64(FILE *file)
+void print_elf_64(FILE *file)
 {
 	Elf64_Ehdr header;
 	int i;
