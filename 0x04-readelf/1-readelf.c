@@ -121,14 +121,14 @@ void print_section_64(FILE *file)
 			flags[j--] = 'X';
 		if (section.sh_flags & SHF_INFO_LINK)
 			flags[j--] = 'I';
-		if (section.sh_flags & SHF_WRITE)
-			flags[j--] = 'W';
 		if (section.sh_flags & SHF_STRINGS)
 			flags[j--] = 'S';
 		if (section.sh_flags & SHF_MERGE)
 			flags[j--] = 'M';
 		if (section.sh_flags & SHF_ALLOC)
 			flags[j--] = 'A';
+		if (section.sh_flags & SHF_WRITE)
+			flags[j--] = 'W';
 		if (section.sh_flags & SHF_EXCLUDE)
 			flags[j--] = 'E';
 		printf("%c%c%c ", flags[0], flags[1], flags[2]);
