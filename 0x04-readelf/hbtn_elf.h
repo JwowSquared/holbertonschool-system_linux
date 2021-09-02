@@ -18,4 +18,10 @@ void print_section_64(FILE *);
 void flip32_1(Elf32_Shdr *);
 void flip64_1(Elf64_Shdr *);
 
+void print_program_32(FILE *);
+void print_program_64(FILE *);
+
+void flip32_2(Elf32_Phdr *);
+void flip64_2(Elf64_Phdr *);
+
 #endif /* _HBTN_ELF_*/
