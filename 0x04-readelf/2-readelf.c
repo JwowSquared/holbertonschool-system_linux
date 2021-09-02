@@ -44,6 +44,12 @@ void print_program_32(FILE *file)
 		flip32_0(&header);
 	fseek(file, (unsigned int)header.e_phoff, SEEK_SET);
 
+	if (header.e_phnum == 0)
+	{
+		printf("\nThere are no program headers in this file.\n");
+		return;
+	}
+
 	printf("\nElf file type is ");
 	if (header.e_type == ET_REL)
 		printf("REL (Relocatable file)\n");
@@ -167,6 +173,12 @@ void print_program_64(FILE *file)
 	if (header.e_ident[EI_DATA] == ELFDATA2MSB)
 		flip64_0(&header);
 	fseek(file, (unsigned int)header.e_phoff, SEEK_SET);
+
+	if (header.e_phnum == 0)
+	{
+		printf("\nThere are no program headers in this file.\n");
+		return;
+	}
 
 	printf("\nElf file type is ");
 	if (header.e_type == ET_REL)
