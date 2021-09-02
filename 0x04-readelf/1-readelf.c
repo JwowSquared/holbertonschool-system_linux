@@ -37,8 +37,12 @@ void print_section_32(FILE *file)
 	int i, j;
 
 	fread(&header, sizeof(header), 1, file);
+	if (header.e_ident[EI_DATA] == ELFDATA2MSB)
+		flip32_0(&header);
 	fseek(file, (unsigned int)header.e_shoff + sizeof(section) * (unsigned int)header.e_shstrndx, SEEK_SET);
 	fread(&str_table, sizeof(str_table), 1, file);
+	if (header.e_ident[EI_DATA] == ELFDATA2MSB)
+		flip32_1(&str_table);
 	fseek(file, (unsigned int)str_table.sh_offset, SEEK_SET);
 	names = malloc(sizeof(char) * str_table.sh_size); /* malloc error unhandled */
 	fread(names, str_table.sh_size, 1, file);
@@ -50,6 +54,8 @@ void print_section_32(FILE *file)
 	for (i = 0; i < header.e_shnum; i++)
 	{
 		fread(&section, sizeof(section), 1, file);
+		if (header.e_ident[EI_DATA] == ELFDATA2MSB)
+			flip32_1(&section);
 		printf("  [%2d] ", i);
 		printf("%-17s ", names + section.sh_name);
 		if (section.sh_type == SHT_NULL)
@@ -86,11 +92,11 @@ void print_section_32(FILE *file)
 			printf("INIT_ARRAY      ");
 		else if (section.sh_type == SHT_FINI_ARRAY)
 			printf("FINI_ARRAY      ");
-		else if (section.sh_type == SHT_GNU_verdef)
+		else if (section.sh_type == 0x6ffffffc)
 			printf("VERDEF          ");
-		else if (section.sh_type == LOOS_1)
+		else if (section.sh_type == 0x6ffffff1)
 			printf("LOOS+ffffff1    ");
-		else if (section.sh_type == LOOS_3)
+		else if (section.sh_type == 0x6ffffff3)
 			printf("LOOS+ffffff3    ");
 		else
 			printf("UNKNOWN         ");
@@ -139,8 +145,12 @@ void print_section_64(FILE *file)
 	int i, j;
 
 	fread(&header, sizeof(header), 1, file);
+	if (header.e_ident[EI_DATA] == ELFDATA2MSB)
+		flip64_0(&header);
 	fseek(file, (unsigned int)header.e_shoff + sizeof(section) * (unsigned int)header.e_shstrndx, SEEK_SET);
 	fread(&str_table, sizeof(str_table), 1, file);
+	if (header.e_ident[EI_DATA] == ELFDATA2MSB)
+		flip64_1(&str_table);
 	fseek(file, (unsigned int)str_table.sh_offset, SEEK_SET);
 	names = malloc(sizeof(char) * str_table.sh_size); /* malloc error unhandled */
 	fread(names, str_table.sh_size, 1, file);
@@ -152,6 +162,8 @@ void print_section_64(FILE *file)
 	for (i = 0; i < header.e_shnum; i++)
 	{
 		fread(&section, sizeof(section), 1, file);
+		if (header.e_ident[EI_DATA] == ELFDATA2MSB)
+			flip64_1(&section);
 		printf("  [%2d] ", i);
 		printf("%-17s ", names + section.sh_name);
 		if (section.sh_type == SHT_NULL)
@@ -188,11 +200,11 @@ void print_section_64(FILE *file)
 			printf("INIT_ARRAY      ");
 		else if (section.sh_type == SHT_FINI_ARRAY)
 			printf("FINI_ARRAY      ");
-		else if (section.sh_type == SHT_GNU_verdef)
+		else if (section.sh_type == 0x6ffffffc)
 			printf("VERDEF          ");
-		else if (section.sh_type == LOOS_1)
+		else if (section.sh_type == 0x6ffffff1)
 			printf("LOOS+ffffff1    ");
-		else if (section.sh_type == LOOS_3)
+		else if (section.sh_type == 0x6ffffff3)
 			printf("LOOS+ffffff3    ");
 		else
 			printf("UNKNOWN         ");

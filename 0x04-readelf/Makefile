@@ -6,7 +6,10 @@ files-0 = \
 flipEndian.c
 
 files-1 = \
-1-readelf.c
+1-readelf.c \
+0-flip.c \
+1-flip.c \
+flipEndian.c
 
 0-hreadelf: $(files-0)
 	gcc -Wall -Werror -Wextra -pedantic $(files-0) -o 0-hreadelf
