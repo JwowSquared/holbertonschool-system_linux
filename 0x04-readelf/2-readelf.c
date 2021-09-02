@@ -35,7 +35,7 @@ void print_program_32(FILE *file)
 	Elf32_Shdr section;
 	Elf32_Shdr str_table;
 	int i, j;
-	unsigned long int position, upper;
+	unsigned long int position, upper, lower;
 	char *names, *interp;
 
 	(void)names;
@@ -139,10 +139,10 @@ void print_program_32(FILE *file)
 				flip32_1(&section);
 			if (section.sh_addr == 0)
 				continue;
-			upper = program.p_offset + program.p_memsz;
-			if (section.sh_offset >= program.p_offset && section.sh_offset < upper)
+			lower = section.sh_offset;
+			upper = section.sh_offset + section.sh_size;
+			if (lower >= program.p_offset && upper <= program.p_offset + program.p_memsz)
 				printf("%s ", names + section.sh_name);
-
 		}
 		printf("\n");
 		fseek(file, position, SEEK_SET);
@@ -158,7 +158,7 @@ void print_program_64(FILE *file)
 	Elf64_Shdr section;
 	Elf64_Shdr str_table;
 	int i, j;
-	unsigned long int position, upper;
+	unsigned long int position, upper, lower;
 	char *names;
 
 	fread(&header, sizeof(header), 1, file);
@@ -253,10 +253,10 @@ void print_program_64(FILE *file)
 				flip64_1(&section);
 			if (section.sh_addr == 0)
 				continue;
-			upper = program.p_offset + program.p_memsz;
-			if (section.sh_offset >= program.p_offset && section.sh_offset < upper)
+			lower = section.sh_offset;
+			upper = section.sh_offset + section.sh_size;
+			if (lower >= program.p_offset && upper <= program.p_offset + program.p_memsz)
 				printf("%s ", names + section.sh_name);
-
 		}
 		printf("\n");
 		fseek(file, position, SEEK_SET);
