@@ -109,7 +109,9 @@ void print_program_32(FILE *file)
 			printf("E ");
 		else
 			printf("  ");
-		printf("0x%x\n", (unsigned int)program.p_align);
+		if (program.p_align > 0)
+			printf("0x");
+		printf("%x\n", (unsigned int)program.p_align);
 		if (program.p_type == PT_INTERP)
 		{
 			position = ftell(file);
@@ -145,7 +147,7 @@ void print_program_32(FILE *file)
 			fread(&section, sizeof(section), 1, file);
 			if (header.e_ident[EI_DATA] == ELFDATA2MSB)
 				flip32_1(&section);
-			if (section.sh_addr == 0)
+			if (section.sh_addr == 0 || section.sh_size == 0)
 				continue;
 			lower = section.sh_offset;
 			upper = section.sh_offset + section.sh_size;
@@ -237,7 +239,9 @@ void print_program_64(FILE *file)
 			printf("E ");
 		else
 			printf("  ");
-		printf("0x%lx\n", (unsigned long int)program.p_align);
+		if (program.p_align > 0)
+			printf("0x");
+		printf("%lx\n", (unsigned long int)program.p_align);
 		if (program.p_type == PT_INTERP)
 		{
 			position = ftell(file);
@@ -274,7 +278,7 @@ void print_program_64(FILE *file)
 			fread(&section, sizeof(section), 1, file);
 			if (header.e_ident[EI_DATA] == ELFDATA2MSB)
 				flip64_1(&section);
-			if (section.sh_addr == 0)
+			if (section.sh_addr == 0 || section.sh_size == 0)
 				continue;
 			lower = section.sh_offset;
 			upper = section.sh_offset + section.sh_size;
