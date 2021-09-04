@@ -2,20 +2,22 @@ all: 0-hreadelf 1-hreadelf 2-hreadelf
 
 files-0 = \
 0-readelf.c \
-0-flip.c \
+0-fetch.c \
+ehdr_flip.c \
 flipEndian.c
 
 files-1 = \
 1-readelf.c \
-0-flip.c \
-1-flip.c \
+1-fetch.c \
+ehdr_flip.c \
+shdr_flip.c \
 flipEndian.c
 
 files-2 = \
 2-readelf.c \
-0-flip.c \
-1-flip.c \
-2-flip.c \
+ehdr_flip.c \
+shdr_flip.c \
+phdr_flip.c \
 flipEndian.c
 
 0-hreadelf: $(files-0)
