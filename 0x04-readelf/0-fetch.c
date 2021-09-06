@@ -1,7 +1,7 @@
 #include "hbtn_elf.h"
 
 /**
-* fetch_ei_class - matches macro with string to display. Only includes enough to match given cases.
+* fetch_ei_class - matches macro with string. Only includes given cases.
 * @class: value in the EI_CLASS slot of the e_ident member of an ElfN_Ehdr
 *
 * Return: string to be displayed
@@ -17,7 +17,7 @@ char *fetch_ei_class(unsigned int class)
 }
 
 /**
-* fetch_ei_data - matches macro with string to display. Only includes enough to match given cases.
+* fetch_ei_data - matches macro with string. Only includes given cases.
 * @data: value in the EI_DATA slot of the e_ident member of an ElfN_Ehdr
 *
 * Return: string to be displayed
@@ -34,7 +34,7 @@ char *fetch_ei_data(unsigned int data)
 }
 
 /**
-* fetch_ei_osabi - matches macro with string to display. Only includes enough to match given cases.
+* fetch_ei_osabi - matches macro with string. Only includes given cases.
 * @osabi: value in the EI_OSABI slot of the e_ident member of an ElfN_Ehdr
 *
 * Return: string to be displayed
@@ -54,7 +54,7 @@ char *fetch_ei_osabi(unsigned int osabi)
 }
 
 /**
-* fetch_e_machine - matches macro with string to display. Only includes enough to match given cases.
+* fetch_e_machine - matches macro with string. Only includes given cases.
 * @machine: e_machine member of an ElfN_Ehdr
 *
 * Return: string to be displayed
@@ -72,7 +72,7 @@ char *fetch_e_machine(unsigned int machine)
 }
 
 /**
-* fetch_e_type - matches macro with string to display. Only includes enough to match given cases.
+* fetch_e_type - matches macro with string. Only includes given cases.
 * @type: e_type member of an ElfN_Ehdr
 *
 * Return: string to be displayed

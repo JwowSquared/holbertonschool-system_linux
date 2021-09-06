@@ -10,7 +10,7 @@ int main(int ac, char **av)
 {
 	FILE *file = NULL;
 	unsigned char magic[EI_NIDENT];
-	
+
 	if (ac != 2)
 	{
 		printf("Usage: 1-hreadelf file_name\n");
@@ -23,9 +23,9 @@ int main(int ac, char **av)
 		fread(&magic, sizeof(magic), 1, file);
 		rewind(file);
 		if (magic[EI_CLASS] == ELFCLASS32)
-			print_section(file, 32);
+			print_sections(file, 32);
 		else if (magic[EI_CLASS] == ELFCLASS64)
-			print_section(file, 64);
+			print_sections(file, 64);
 	}
 
 	fclose(file);
@@ -34,26 +34,28 @@ int main(int ac, char **av)
 }
 
 /**
-* print_section - prints an Elf64_Shdr. Almost identical to print32_Shdr -- see README
+* print_sections - mimics readelf -W -S
 * @file: open file pointer to ELF
+* @bits: either 32 or 64
 */
-void print_section(FILE *file, int bits)
+void print_sections(FILE *file, int bits)
 {
 	header_t header;
 	section_t section;
-	char *names = NULL, *prompts[3];
+	char *names = NULL, *prompt, *p[3];
 	int i;
 
-	prompts[0] = bits == 32 ? "%08lx " : "%016lx ";
-	prompts[1] = bits == 32 ? "" : "ess     ";
-	prompts[2] = bits == 32 ? "" : ", l(large)";
-	
+	p[0] = bits == 32 ? "%08lx " : "%016lx ";
+	p[1] = bits == 32 ? "Addr" : "Address     ";
+	p[2] = bits == 32 ? "" : ", l(large)";
+
 	read_header(&header, file, bits);
 	names = fetch_strtab(&header, file, bits);
-	printf("There are %d section headers, starting at offset %#lx:\n", header.e_shnum, header.e_shoff);
+	printf("There are %d section headers", header.e_shnum);
+	printf(", starting at offset %#lx:\n", header.e_shoff);
 	printf("\nSection Headers:\n");
-	printf("  [Nr] Name              Type              Addr%s     Off    Size   ES Flg Lk Inf Al\n", prompts[1]);
-	
+	prompt = "  %-22s %-17s %-8s Off    Size   ES Flg Lk Inf Al\n";
+	printf(prompt, "[Nr] Name", "Type", p[1]);
 	fseek(file, header.e_shoff, SEEK_SET);
 	for (i = 0; i < header.e_shnum; i++)
 	{
@@ -61,7 +63,7 @@ void print_section(FILE *file, int bits)
 		printf("  [%2d] ", i);
 		printf("%-17s ", names + section.sh_name);
 		printf("%-17s ", fetch_sh_type(section.sh_type));
-		printf(prompts[0], section.sh_addr);
+		printf(p[0], section.sh_addr);
 		printf("%06lx ", section.sh_offset);
 		printf("%06lx ", section.sh_size);
 		printf("%02lx ", section.sh_entsize);
@@ -71,8 +73,11 @@ void print_section(FILE *file, int bits)
 		printf("%2lu\n", section.sh_addralign);
 	}
 	printf("Key to Flags:\n");
-	printf("  W (write), A (alloc), X (execute), M (merge), S (strings)%s\n", prompts[2]);
-	printf("  I (info), L (link order), G (group), T (TLS), E (exclude), x (unknown)\n");
-	printf("  O (extra OS processing required) o (OS specific), p (processor specific)\n");
+	printf("  W (write), A (alloc), X (execute)");
+	printf(", M (merge), S (strings)%s\n", p[2]);
+	printf("  I (info), L (link order), G (group)");
+	printf(", T (TLS), E (exclude), x (unknown)\n");
+	printf("  O (extra OS processing required)");
+	printf(" o (OS specific), p (processor specific)\n");
 	free(names);
 }

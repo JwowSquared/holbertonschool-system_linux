@@ -1,7 +1,7 @@
 #include "hbtn_elf.h"
 
 /**
-* fetch_sh_type - matches macro with string to display. Only includes enough to match given cases.
+* fetch_sh_type - matches macro with string. Only includes given cases.
 * @type: sh_type  member of an ElfN_Shdr
 *
 * Return: string to be displayed
@@ -51,7 +51,7 @@ char *fetch_sh_type(unsigned int type)
 }
 
 /**
-* print_sh_flags - matches macro with flags to print. Only includes enough to match given cases.
+* print_sh_flags - matches macro with flags. Only includes given cases.
 * @raw: sh_flags member of an ElfN_Shdr
 */
 void print_sh_flags(unsigned long int raw)
@@ -94,7 +94,7 @@ char *fetch_strtab(header_t *header, FILE *file, int bits)
 	int sh_diff = sizeof(section) - (64 - bits) / 4 * 3;
 	unsigned long int position;
 
-	sh_diff = sizeof(section) - (64 - bits) / 4 * 3; /*subtracts 24 if bits is 32*/
+	sh_diff = sizeof(section) - (64 - bits) / 4 * 3;
 
 	position = ftell(file);
 

@@ -11,7 +11,7 @@ int main(int ac, char **av)
 {
 	FILE *file = NULL;
 	unsigned char magic[EI_NIDENT];
-	
+
 	if (ac != 2)
 	{
 		printf("Usage: 0-hreadelf file_name\n");
@@ -41,32 +41,33 @@ int main(int ac, char **av)
 */
 void print_header(FILE *file, int bits)
 {
-	header_t header;
+	header_t hdr;
 	int i;
+	char *p[] = {"(bytes into file)", "(bytes)"};
 
-	read_header(&header, file, bits);
+	read_header(&hdr, file, bits);
 
 	printf("ELF Header:\n");
 	printf("  Magic:   ");
 	for (i = 0; i < EI_NIDENT; i++)
-		printf("%02x ", header.e_ident[i]);
+		printf("%02x ", hdr.e_ident[i]);
 	printf("\n");
-	printf("  %-34s %s\n", "Class:", fetch_ei_class(header.e_ident[EI_CLASS]));
-	printf("  %-34s %s\n", "Data:", fetch_ei_data(header.e_ident[EI_DATA]));
-	printf("  %-34s %s\n", "Version:", "1 (current)"); /* e_ident[EI_VERSION] is always 1 */
-	printf("  %-34s %s\n", "OS/ABI:", fetch_ei_osabi(header.e_ident[EI_OSABI]));
-	printf("  %-34s %u\n", "ABI Version:", header.e_ident[EI_ABIVERSION]);
-	printf("  %-34s %s\n", "Type:", fetch_e_type(header.e_type));
-	printf("  %-34s %s\n", "Machine:", fetch_e_machine(header.e_machine));
-	printf("  %-34s %s\n", "Version:", "0x1"); /* header.e_version is always 0x1 */
-	printf("  %-34s %#lx\n", "Entry point address:", header.e_entry);
-	printf("  %-34s %lu %s\n", "Start of program headers:", header.e_phoff, "(bytes into file)");
-	printf("  %-34s %lu %s\n", "Start of section headers:", header.e_shoff, "(bytes into file)");
-	printf("  %-34s %s\n", "Flags:", "0x0"); /* header.e_flags is always 0x0 */
-	printf("  %-34s %u %s\n", "Size of this header:", header.e_ehsize, "(bytes)");
-	printf("  %-34s %u %s\n", "Size of program headers:", header.e_phentsize, "(bytes)");
-	printf("  %-34s %u\n", "Number of program headers:", header.e_phnum);
-	printf("  %-34s %u %s\n", "Size of section headers:", header.e_shentsize, "(bytes)");
-	printf("  %-34s %u\n", "Number of section headers:", header.e_shnum);
-	printf("  %-34s %u\n", "Section header string table index:", header.e_shstrndx);
+	printf("  %-34s %s\n", "Class:", fetch_ei_class(hdr.e_ident[EI_CLASS]));
+	printf("  %-34s %s\n", "Data:", fetch_ei_data(hdr.e_ident[EI_DATA]));
+	printf("  %-34s %s\n", "Version:", "1 (current)");
+	printf("  %-34s %s\n", "OS/ABI:", fetch_ei_osabi(hdr.e_ident[EI_OSABI]));
+	printf("  %-34s %u\n", "ABI Version:", hdr.e_ident[EI_ABIVERSION]);
+	printf("  %-34s %s\n", "Type:", fetch_e_type(hdr.e_type));
+	printf("  %-34s %s\n", "Machine:", fetch_e_machine(hdr.e_machine));
+	printf("  %-34s %s\n", "Version:", "0x1");
+	printf("  %-34s %#lx\n", "Entry point address:", hdr.e_entry);
+	printf("  %-34s %lu %s\n", "Start of program headers:", hdr.e_phoff, p[0]);
+	printf("  %-34s %lu %s\n", "Start of section headers:", hdr.e_shoff, p[0]);
+	printf("  %-34s %s\n", "Flags:", "0x0");
+	printf("  %-34s %u %s\n", "Size of this header:", hdr.e_ehsize, p[1]);
+	printf("  %-34s %u %s\n", "Size of program headers:", hdr.e_phentsize, p[1]);
+	printf("  %-34s %u\n", "Number of program headers:", hdr.e_phnum);
+	printf("  %-34s %u %s\n", "Size of section headers:", hdr.e_shentsize, p[1]);
+	printf("  %-34s %u\n", "Number of section headers:", hdr.e_shnum);
+	printf("  %-34s %u\n", "Section header string table index:", hdr.e_shstrndx);
 }

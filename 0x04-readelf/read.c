@@ -4,7 +4,7 @@
 * read_header - freads an ElfN_Ehdr from file
 * @out: pointer to header to read into
 * @file: open file pointer to ELF
-* bits: either 32 or 64
+* @bits: either 32 or 64
 */
 void read_header(header_t *out, FILE *file, int bits)
 {
@@ -42,7 +42,7 @@ void read_header(header_t *out, FILE *file, int bits)
 * @out: pointer to section to read into
 * @header: reference to ELF header struct
 * @file: open file pointer to ELF
-* bits: either 32 or 64
+* @bits: either 32 or 64
 */
 void read_section(section_t *out, header_t *header, FILE *file, int bits)
 {
@@ -67,4 +67,34 @@ void read_section(section_t *out, header_t *header, FILE *file, int bits)
 
 	if (header->e_ident[EI_DATA] == ELFDATA2MSB)
 		flip_section(out, bits);
+}
+
+/**
+* read_program - freads an ElfN_Phdr from file
+* @out: pointer to program to read into
+* @header: reference to ELF header struct
+* @file: open file pointer to ELF
+* @bits: either 32 or 64
+*/
+void read_program(program_t *out, header_t *header, FILE *file, int bits)
+{
+	Elf32_Phdr p32;
+
+	if (bits == 32)
+	{
+		fread(&p32, sizeof(p32), 1, file);
+		out->p_type = p32.p_type;
+		out->p_flags = p32.p_flags;
+		out->p_offset = p32.p_offset;
+		out->p_vaddr = p32.p_vaddr;
+		out->p_paddr = p32.p_paddr;
+		out->p_filesz = p32.p_filesz;
+		out->p_memsz = p32.p_memsz;
+		out->p_align = p32.p_align;
+	}
+	else
+		fread(out, sizeof(*out), 1, file);
+
+	if (header->e_ident[EI_DATA] == ELFDATA2MSB)
+		flip_program(out, bits);
 }

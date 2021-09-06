@@ -1,5 +1,12 @@
 #include "hbtn_elf.h"
 
+/**
+* flip_endian - reverses a number but bytes stay together
+* @num: number to flip
+* @size: size in bits of num
+*
+* Return: flipped value
+*/
 unsigned long int flip_endian(unsigned long int num, int size)
 {
 	unsigned long int left, right;
