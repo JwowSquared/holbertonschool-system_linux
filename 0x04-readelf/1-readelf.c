@@ -46,15 +46,15 @@ void print_sections(FILE *file, int bits)
 	int i;
 
 	p[0] = bits == 32 ? "%08lx " : "%016lx ";
-	p[1] = bits == 32 ? "Addr" : "Address     ";
-	p[2] = bits == 32 ? "" : ", l(large)";
+	p[1] = bits == 32 ? "Addr    " : "Address         ";
+	p[2] = bits == 32 ? "" : ", l (large)";
 
 	read_header(&header, file, bits);
 	names = fetch_strtab(&header, file, bits);
 	printf("There are %d section headers", header.e_shnum);
 	printf(", starting at offset %#lx:\n", header.e_shoff);
 	printf("\nSection Headers:\n");
-	prompt = "  %-22s %-17s %-8s Off    Size   ES Flg Lk Inf Al\n";
+	prompt = "  %-22s %-15s %s Off    Size   ES Flg Lk Inf Al\n";
 	printf(prompt, "[Nr] Name", "Type", p[1]);
 	fseek(file, header.e_shoff, SEEK_SET);
 	for (i = 0; i < header.e_shnum; i++)
@@ -62,7 +62,7 @@ void print_sections(FILE *file, int bits)
 		read_section(&section, &header, file, bits);
 		printf("  [%2d] ", i);
 		printf("%-17s ", names + section.sh_name);
-		printf("%-17s ", fetch_sh_type(section.sh_type));
+		printf("%-15s ", fetch_sh_type(section.sh_type));
 		printf(p[0], section.sh_addr);
 		printf("%06lx ", section.sh_offset);
 		printf("%06lx ", section.sh_size);
