@@ -1,6 +1,22 @@
 #include "hbtn_elf.h"
 
 /**
+* fetch_ei_class - matches macro with string to display. Only includes enough to match given cases.
+* @class: value in the EI_CLASS slot of the e_ident member of an ElfN_Ehdr
+*
+* Return: string to be displayed
+*/
+char *fetch_ei_class(unsigned int class)
+{
+	if (class == ELFCLASS32)
+		return ("ELF32");
+	if (class == ELFCLASS64)
+		return ("ELF64");
+
+	return ("UNIMPLEMENTED");
+}
+
+/**
 * fetch_ei_data - matches macro with string to display. Only includes enough to match given cases.
 * @data: value in the EI_DATA slot of the e_ident member of an ElfN_Ehdr
 *

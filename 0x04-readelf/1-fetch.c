@@ -28,8 +28,6 @@ char *fetch_sh_type(unsigned int type)
 		return ("NOBITS");
 	if (type == SHT_REL)
 		return ("REL");
-	if (type == SHT_SHLIB)
-		return ("SHLIB");
 	if (type == SHT_DYNSYM)
 		return ("DYNSYM");
 	if (type == SHT_GNU_HASH)
@@ -79,4 +77,33 @@ void print_sh_flags(unsigned long int raw)
 		flags[i--] = ' ';
 
 	printf("%c%c%c ", flags[0], flags[1], flags[2]);
+}
+
+/**
+* fetch_strtab - returns a malloc'd copy of the string table
+* @header: ELF header
+* @file: open file pointer
+* @bits: either 32 or 64
+*
+* Return: pointer to malloc'd area
+*/
+char *fetch_strtab(header_t *header, FILE *file, int bits)
+{
+	char *out;
+	section_t section;
+	int sh_diff = sizeof(section) - (64 - bits) / 4 * 3;
+	unsigned long int position;
+
+	sh_diff = sizeof(section) - (64 - bits) / 4 * 3; /*subtracts 24 if bits is 32*/
+
+	position = ftell(file);
+
+	fseek(file, header->e_shoff + sh_diff * header->e_shstrndx, SEEK_SET);
+	read_section(&section, header, file, bits);
+	fseek(file, section.sh_offset, SEEK_SET);
+	out = malloc(sizeof(char) * section.sh_size); /* malloc error unhandled */
+	fread(out, section.sh_size, 1, file);
+
+	fseek(file, position, SEEK_SET);
+	return (out);
 }
