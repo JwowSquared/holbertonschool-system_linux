@@ -49,7 +49,8 @@ void print_programs(FILE *file, int bits)
 	p[0] = bits == 32 ? "0x%08lx " : "0x%016lx ";
 	p[1] = bits == 32 ? "0x%05lx " : "0x%06lx ";
 	read_header(&header, file, bits);
-	display_p_prompt(&header, bits);
+	if (display_p_prompt(&header, bits) == -1)
+		return;
 	fseek(file, header.e_phoff, SEEK_SET);
 	for (i = 0; i < header.e_phnum; i++)
 	{

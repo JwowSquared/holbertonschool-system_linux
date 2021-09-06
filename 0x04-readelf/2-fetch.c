@@ -61,6 +61,8 @@ char *fetch_p_type(unsigned int type)
 		return ("GNU_STACK");
 	if (type == PT_GNU_RELRO)
 		return ("GNU_RELRO");
+	if (type == 0x6464e550)
+		return ("LOOS+464e550");
 
 	return ("UNIMPLEMENTED");
 }
