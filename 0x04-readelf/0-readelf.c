@@ -60,7 +60,7 @@ void print_header(FILE *file, int bits)
 	printf("  %-34s %s\n", "Type:", fetch_e_type(hdr.e_type));
 	printf("  %-34s %s\n", "Machine:", fetch_e_machine(hdr.e_machine));
 	printf("  %-34s %s\n", "Version:", "0x1");
-	printf("  %-34s %#lx\n", "Entry point address:", hdr.e_entry);
+	printf("  %-34s 0x%lx\n", "Entry point address:", hdr.e_entry);
 	printf("  %-34s %lu %s\n", "Start of program headers:", hdr.e_phoff, p[0]);
 	printf("  %-34s %lu %s\n", "Start of section headers:", hdr.e_shoff, p[0]);
 	printf("  %-34s %s\n", "Flags:", "0x0");
