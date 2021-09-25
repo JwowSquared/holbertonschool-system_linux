@@ -13,3 +13,13 @@ int handle_sigaction(void)
 
 	return (sigaction(SIGINT, &act, NULL));
 }
+
+/**
+* helper - prescribed behavior to overwrite SIGINT with
+* @n: numerical value of the signal caught, usually 2
+*/
+void helper(int n)
+{
+	printf("Gotcha! [%d]\n", n);
+	fflush(stdout);
+}
