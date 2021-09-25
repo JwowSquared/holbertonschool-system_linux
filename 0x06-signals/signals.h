@@ -5,6 +5,12 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <signal.h>
+#include <string.h>
+
+typedef struct macro_matcher_s {
+	char *code;
+	char *val;
+} matcher_t;
 
 /* helper functions */
 void helper(int);
