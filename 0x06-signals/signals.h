@@ -7,17 +7,6 @@
 #include <signal.h>
 #include <string.h>
 
-/**
-* struct macro_matcher_s - there HAS to be a better way than this
-* @code: signal code
-* @val: signal description
-*/
-typedef struct macro_matcher_s
-{
-	char *code;
-	char *val;
-} matcher_t;
-
 /* helper functions */
 void helper(int);
 
@@ -27,7 +16,6 @@ void (*current_handler_signal(void))(int);
 int handle_sigaction(void);
 void (*current_handler_sigaction(void))(int);
 int trace_signal_sender(void);
-
 int pid_exist(pid_t pid);
 
 #endif /* _SIGNALS_H_ */
