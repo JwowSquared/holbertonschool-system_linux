@@ -7,7 +7,11 @@
 */
 int trace_signal_sender(void)
 {
-	if (signal(SIGQUIT, helper) == SIG_ERR)
+	struct sigaction act;
+
+	act.sa_handler = helper;
+
+	if (sigaction(SIGQUIT, &act, NULL) == -1)
 		return (-1);
 
 	return (0);
