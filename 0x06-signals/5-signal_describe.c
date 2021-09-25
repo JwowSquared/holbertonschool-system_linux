@@ -15,6 +15,8 @@ int main(int ac, char **av)
 		exit(EXIT_FAILURE);
 	}
 
+	dup2(1, 2);
+
 	psignal(atoi(av[1]), av[1]);
 	exit(EXIT_SUCCESS);
 }
