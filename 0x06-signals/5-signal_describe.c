@@ -10,10 +10,10 @@
 int main(int ac, char **av)
 {
 	int i = 0;
-	matcher_t m[] = {
-		{"1", "Hangup"}, {"2", "Interrupt"},
-		{"3", "Quit"}, {"9", "Killed"},
-		{"20", "Stopped"}, {NULL, NULL}};
+	matcher_t m[] = {{"1", "Hangup"}, {"2", "Interrupt"}, {"3", "Quit"},
+		{"4", "Illegal instruction"}, {"5", "Trace/breakpoint trap"},
+		{"6", "Aborted"}, {"7", "Bus error"}, {"8", "Floating point exception"},
+		{"9", "Killed"}, {"10", "User defined signal 1"}, {NULL, NULL}};
 
 	if (ac != 2)
 		printf("Usage: %s <signum>\n", av[0]), exit(EXIT_FAILURE);

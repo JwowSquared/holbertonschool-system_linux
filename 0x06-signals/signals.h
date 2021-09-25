@@ -7,7 +7,13 @@
 #include <signal.h>
 #include <string.h>
 
-typedef struct macro_matcher_s {
+/**
+* struct macro_matcher_s - there HAS to be a better way than this
+* @code: signal code
+* @val: signal description
+*/
+typedef struct macro_matcher_s
+{
 	char *code;
 	char *val;
 } matcher_t;
